@@ -5,7 +5,63 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+a. Add a pet 
+b. Add or edit tasks 
+c. Generate daily schedule
+
 - What classes did you include, and what responsibilities did you assign to each?
+The classes that I included are:
+
+Owner — stores owner info (name, etc.)
+Pet - holds pet info
+Task - stores what needs to be done
+Schedule - stores the timeline/schedule for thr task to be done
+
+```mermaid
+classDiagram
+    class Owner {
+        String name
+        List pets
+        String email
+        String phone
+        getName()
+        getPets()
+        addPet()
+        getEmail()
+        getPhone()
+    }
+
+    class Pet {
+        String name
+        int age
+        String type
+        getName()
+        getAge()
+        getType()
+    }
+
+    class Task {
+        String name
+        int duration
+        String priority
+        getName()
+        getDuration()
+        getPriority()
+    }
+
+    class Schedule {
+        List tasks
+        String start_time
+        List timeline
+        getTasks()
+        getStartTime()
+        getTimeline()
+    }
+
+    Owner "1" --> "many" Pet : has
+    Pet "1" --> "many" Task : has
+    Task "many" --> "1" Schedule : scheduled in
+```
 
 **b. Design changes**
 
