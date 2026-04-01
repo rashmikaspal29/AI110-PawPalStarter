@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from typing import List
+from datetime import datetime, timedelta
+from typing import List, Optional
 
 
 @dataclass
@@ -40,9 +41,16 @@ class Task:
         """Return True if the task has been completed."""
         return self.completed
 
-    def mark_complete(self) -> None:
-        """Mark this task as completed."""
+    def mark_complete(self) -> Optional["Task"]:
+        """Mark this task as completed and return a new recurring instance if applicable."""
         self.completed = True
+        if self.frequency == "daily":
+            next_time = (datetime.strptime(self.time, "%H:%M") + timedelta(days=1)).strftime("%H:%M")
+            return Task(self.name, self.description, next_time, self.frequency, self.priority, self.duration)
+        elif self.frequency == "weekly":
+            next_time = (datetime.strptime(self.time, "%H:%M") + timedelta(weeks=1)).strftime("%H:%M")
+            return Task(self.name, self.description, next_time, self.frequency, self.priority, self.duration)
+        return None
 
     def get_summary(self) -> str:
         """Return a formatted one-line summary of the task."""
@@ -127,6 +135,35 @@ class Scheduler:
         all_tasks = self.getAllTasks()
         sorted_tasks = sorted(all_tasks, key=lambda t: priority_order.get(t.getPriority(), 3))
         return sorted_tasks
+
+    def sort_by_time(self) -> List[Task]:
+        """Return all tasks sorted by their scheduled time (HH:MM)."""
+        return sorted(self.getAllTasks(), key=lambda t: t.getTime())
+
+    def filter_tasks(self, pet_name: str = "", completed: Optional[bool] = None) -> List[Task]:
+        """Return tasks filtered by pet name and/or completion status."""
+        results = []
+        for pet in self.owner.getPets():
+            if pet_name and pet.getName().lower() != pet_name.lower():
+                continue
+            for task in pet.getTasks():
+                if completed is not None and task.isCompleted() != completed:
+                    continue
+                results.append(task)
+        return results
+
+    def detect_conflicts(self) -> List[str]:
+        """Return warning messages for tasks scheduled at the same time."""
+        seen = {}
+        warnings = []
+        for task in self.getAllTasks():
+            if task.getTime() in seen:
+                warnings.append(
+                    f"Conflict at {task.getTime()}: '{seen[task.getTime()]}' and '{task.getName()}'"
+                )
+            else:
+                seen[task.getTime()] = task.getName()
+        return warnings
 
     def printSchedule(self) -> None:
         """Print the prioritized daily schedule to the console."""

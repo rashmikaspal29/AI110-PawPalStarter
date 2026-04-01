@@ -93,7 +93,10 @@ Initially Schedule had a generic list of tasks with no connection to a specific 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+The conflict detection only flags tasks that share an exact `HH:MM` start time. It does not check whether a 30-minute task overlaps with a task starting 15 minutes later.
+
 - Why is that tradeoff reasonable for this scenario?
+For a simple pet care planner, exact-time conflicts are the most common and most obvious problem to catch. Detecting overlapping durations would require tracking end times for every task, adding complexity that isn't needed at this stage.
 
 ---
 
