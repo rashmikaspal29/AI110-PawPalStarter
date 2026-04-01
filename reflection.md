@@ -63,11 +63,24 @@ classDiagram
     Task "many" --> "1" Schedule : scheduled in
 ```
 
+Classes and their descriptions: 
+
+a. Owner Class stores the owner's name, email, phone and  its pets.
+
+b. Pet Class stores the pet's name, age, type and it contains the list of tasks.
+
+c. Task Class stores the name of the tasks, duration and priorities of a care activity that belongs to a pet.
+
+d. Schedule stores the startTime, and organizes the tasks into a timeline showing when each task should be done.  
+
+
 **b. Design changes**
 
 - Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+Yes, the design changed.
 
+- If yes, describe at least one change and why you made it.
+Initially Schedule had a generic list of tasks with no connection to a specific pet. After review, we added a link between Pet and Schedule so that when a schedule is generated, it knows which pet it belongs to and can pull that pet's tasks directly.
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
