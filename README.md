@@ -75,7 +75,7 @@ Tests cover:
 - **Filtering** — tasks can be filtered by pet name or completion status
 - **Edge cases** — no tasks, single task, non-recurring tasks, no conflicts
 
-Confidence level: ⭐⭐⭐⭐⭐ (5/5) — all 12 tests pass covering happy paths and edge cases.
+Confidence level: (5/5) — all 12 tests pass covering happy paths and edge cases.
 
 ## Smarter Scheduling
 
